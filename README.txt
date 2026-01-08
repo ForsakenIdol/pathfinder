@@ -30,3 +30,6 @@ I've replaced the `| sort | uniq` pipe fix with the `DEDUP_PATH` assignment with
 2. For each directory, if `awk` has already seen it, continue.
 3. If the directory is new to `awk`, add it to the `seen` associative array, then print it.
 4. Rejoin the output using the Output Record Separator (ORS=:).
+
+Misc. Notes:
+    - SC3040 (warning): In POSIX sh, set option pipefail (set -o pipefail) is undefined.
