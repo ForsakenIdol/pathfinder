@@ -7,6 +7,8 @@ Possible arguments:
         output only the executables available in the DIR directory
     -r, --random
         output a random executable from the list. If -d / --directory is also specified, the random executable will be chosen from that list instead
+    - s, --summary
+        print only the number of executables in each directory in PATH (summary mode)
     -h, --help
         display this help and exit
 
