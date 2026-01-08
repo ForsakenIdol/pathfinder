@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e -u -o pipefail
+
 print_executables() {
     IFS=: # Change the default character used to split a string to a colon ':'
     for PATHNAME in $(echo "$PATH" | sort | uniq); do
