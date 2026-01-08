@@ -13,3 +13,5 @@ Possible arguments:
         display this help and exit
 
 shellcheck --shell=sh pathfinder.sh
+
+https://www.perplexity.ai/search/my-plan-is-to-start-with-the-s-LeKwnp.XQeaUWThdaeo6EA
