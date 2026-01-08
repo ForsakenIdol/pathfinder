@@ -19,3 +19,8 @@ shellcheck --shell=sh pathfinder.sh
     -u (nounset): Treats unset or null variables as errors during expansion to avoid silent failures from typos such as ${typo_var}.
     -o: Enables a shell option. Here, it is used to enable the `pipefail` option.
     pipefail: Pipeline exit status reflects the last (rightmost) command that failed (non-zero), rather than just the final command, catching mid-pipe errors like cmd1 | cmd2 | cmd3. 
+
+I've replaced the `-executable` flag with `-exec test -x {} \;` in the `find` utility, because:
+- `-executable` is a GNU find predicate that tests whether the current user is actually allowed to execute the file, taking ACLs and effective IDs into account.
+- `-exec test -x {} \; (or [ -x {} ])` instead checks the execute permission bits for the file against the real UID/GID of the process running the `find` utility.
+The second instance makes the script execute slower, but decouples the script from being GNU specific, and both instances actually do really similar things.
