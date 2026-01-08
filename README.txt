@@ -7,7 +7,7 @@ Possible arguments:
         output only the executables available in the DIR directory
     -r, --random
         output a random executable from the list. If -d / --directory is also specified, the random executable will be chosen from that list instead
-    - s, --summary
+    -s, --summary
         print only the number of executables in each directory in PATH (summary mode)
     -h, --help
         display this help and exit
@@ -24,3 +24,9 @@ I've replaced the `-executable` flag with `-exec test -x {} \;` in the `find` ut
 - `-executable` is a GNU find predicate that tests whether the current user is actually allowed to execute the file, taking ACLs and effective IDs into account.
 - `-exec test -x {} \; (or [ -x {} ])` instead checks the execute permission bits for the file against the real UID/GID of the process running the `find` utility.
 The second instance makes the script execute slower, but decouples the script from being GNU specific, and both instances actually do really similar things.
+
+I've replaced the `| sort | uniq` pipe fix with the `DEDUP_PATH` assignment with `awk`. This is because maintaining the order of the directories in $PATH is extremely important for duplicate executable handling. The `awk` block does the following:
+1. Split the PATH into individual directory entries using the Record Separator (RS=:).
+2. For each directory, if `awk` has already seen it, continue.
+3. If the directory is new to `awk`, add it to the `seen` associative array, then print it.
+4. Rejoin the output using the Output Record Separator (ORS=:).
