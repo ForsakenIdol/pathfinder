@@ -35,12 +35,14 @@ validate_path() {
 
 print_executables() {
     PATH_TO_EXAMINE=$1
-    validate_path $PATH_TO_EXAMINE # Validate PATH_TO_EXAMINE
+    validate_path "$PATH_TO_EXAMINE" # Validate PATH_TO_EXAMINE
 
     # Deduplicate entries, maintaining directory order, strip trailing colon if present
-    $DEDUPLICATE && PATH_TO_EXAMINE=$(printf '%s' "$PATH_TO_EXAMINE" |
-                                      awk -v RS=: -v ORS=: '!($0 in seen) { seen[$0] = 1; print $0 }') &&
-                    PATH_TO_EXAMINE="${PATH_TO_EXAMINE%:}" # ${VAR%PATTERN} removes PATTERN from the end of VAR if present
+    if $DEDUPLICATE; then
+        PATH_TO_EXAMINE=$(printf '%s' "$PATH_TO_EXAMINE" |
+                          awk -v RS=: -v ORS=: '!($0 in seen) { seen[$0] = 1; print $0 }')
+        PATH_TO_EXAMINE="${PATH_TO_EXAMINE%:}" # ${VAR%PATTERN} removes PATTERN from the end of VAR if present
+    fi
                     
     old_ifs=$IFS
     IFS=: # Change the default character used to split a string to a colon ':'
@@ -66,8 +68,8 @@ main() {
             ?) echo "Unknown option $opt" >&2; exit 1 ;;
         esac
     done
-    
-    print_executables $PATH_TO_EXAMINE
+
+    print_executables "$PATH_TO_EXAMINE"
 }
 
 main "$@"
