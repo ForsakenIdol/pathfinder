@@ -9,17 +9,17 @@ EFFECTIVE_EXECUTABLES_ONLY=false
 send_help() {
     cat << 'EOF'
 Usage:
-    -p, --path=PATH
+    -p PATH
         use a custom PATH value instead of the one set in the shell's environment
     -u
         do not dedupe PATH, keep duplicate directories if present
-    -e, --effective
+    -e
         for duplicate executables in multiple locations, keep only the effective one that will be used when the executable is called directly
-    -r, --random
-        output a random executable from the list
-    -s, --summary
-        print only the number of executables in each directory in PATH (summary mode); this flag is ignored when -e / --executable is set
-    -h, --help
+    -r
+        output a random executable from the list, will override the -s and -e output modes if either of these are set
+    -s
+        print only the number of executables in each directory in PATH (summary mode); this flag is ignored when -e is set
+    -h
         display this help and exit
 EOF
 }
