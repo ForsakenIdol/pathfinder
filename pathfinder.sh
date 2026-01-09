@@ -24,12 +24,23 @@ Usage:
     """
 }
 
+# Basic PATH validation
+validate_path() {
+    if [ -z "${PATH_TO_EXAMINE+x}" ] || [ -z "$PATH_TO_EXAMINE" ]; then
+        echo "Error: PATH (or custom PATH) is empty or unset" >&2
+        exit 1
+    fi
+}
+
+
 print_executables() {
+
+    validate_path # Validate PATH_TO_EXAMINE
 
     # Deduplicate entries, maintaining directory order
     $DEDUPLICATE && PATH_TO_EXAMINE=$(printf '%s' "$PATH_TO_EXAMINE" |
                       awk -v RS=: -v ORS=: '!($0 in seen) { seen[$0] = 1; print $0 }')
-
+    
     old_ifs=$IFS
     IFS=: # Change the default character used to split a string to a colon ':'
     for PATHNAME in $PATH_TO_EXAMINE; do
@@ -50,7 +61,7 @@ main() {
             u) DEDUPLICATE=false ;;
             p) PATH_TO_EXAMINE=$OPTARG ;;
             s) SUMMARY_PER_DIRECTORY=true ;;
-            ?) echo "Unknown option $opt"; exit 1 ;;
+            ?) echo "Unknown option $opt" >&2; exit 1 ;;
         esac
     done
     print_executables
