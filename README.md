@@ -25,10 +25,11 @@ shellcheck --shell=sh pathfinder.sh
 ```
 
 `set -euo pipefail` enables "strict mode":
-    -e (errexit): Script exits immediately on any command's non-zero exit status, preventing error propagation; exceptions include conditionals and command lists.
-    -u (nounset): Treats unset or null variables as errors during expansion to avoid silent failures from typos such as ${typo_var}.
-    -o: Enables a shell option. Here, it is used to enable the `pipefail` option.
-    pipefail: Pipeline exit status reflects the last (rightmost) command that failed (non-zero), rather than just the final command, catching mid-pipe errors like cmd1 | cmd2 | cmd3. 
+1. -e (errexit): Script exits immediately on any command's non-zero exit status, preventing error propagation; exceptions include conditionals and command lists.
+2. -u (nounset): Treats unset or null variables as errors during expansion to avoid silent failures from typos such as ${typo_var}.
+3. -o: Enables a shell option. Here, it is used to enable the `pipefail` option.
+pipefail: Pipeline exit status reflects the last (rightmost) command that failed (non-zero), rather than just the final command, catching mid-pipe errors like cmd1 | cmd2 | cmd3.
+    - Pipefail is not guaranteed to be supported under `sh`.
 
 You can replace the `-executable` flag with `-exec test -x {} \;` in the `find` utility if desired, because:
 - `-executable` is a GNU find predicate that tests whether the current user is actually allowed to execute the file, taking ACLs and effective IDs into account.
