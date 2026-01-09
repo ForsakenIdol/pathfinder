@@ -41,7 +41,7 @@ print_executables() {
     $DEDUPLICATE && PATH_TO_EXAMINE=$(printf '%s' "$PATH_TO_EXAMINE" |
                                       awk -v RS=: -v ORS=: '!($0 in seen) { seen[$0] = 1; print $0 }') &&
                     PATH_TO_EXAMINE="${PATH_TO_EXAMINE%:}" # ${VAR%PATTERN} removes PATTERN from the end of VAR if present
-    echo $PATH_TO_EXAMINE
+                    
     old_ifs=$IFS
     IFS=: # Change the default character used to split a string to a colon ':'
     for PATHNAME in $PATH_TO_EXAMINE; do
