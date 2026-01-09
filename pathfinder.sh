@@ -3,11 +3,30 @@
 set -e -u
 
 PATH_TO_EXAMINE=$PATH
+DEDUPLICATE=true
+
+send_help() {
+    echo """
+Usage:
+    -p, --path=PATH
+        use a custom PATH value instead of the one set in the shell's environment
+    -u
+        do not dedupe PATH, keep duplicate directories if present
+    -e, --effective=EXECUTABLE
+        for duplicate executables in multiple locations, keep only the effective one that will be used when the executable is called directly
+    -r, --random
+        output a random executable from the list
+    -s, --summary
+        print only the number of executables in each directory in PATH (summary mode)
+    -h, --help
+        display this help and exit
+    """
+}
 
 print_executables() {
 
     # Deduplicate entries, maintaining directory order
-    PATH_TO_EXAMINE=$(printf '%s' "$PATH_TO_EXAMINE" |
+    $DEDUPLICATE && PATH_TO_EXAMINE=$(printf '%s' "$PATH_TO_EXAMINE" |
                       awk -v RS=: -v ORS=: '!($0 in seen) { seen[$0] = 1; print $0 }')
 
     old_ifs=$IFS
@@ -20,10 +39,12 @@ print_executables() {
 }
 
 main() {
-    while getopts "p:-:" opt; do
+    while getopts "hup:-:" opt; do
         case $opt in
+            h) send_help; exit 0 ;;
+            u) DEDUPLICATE=false ;;
             p) PATH_TO_EXAMINE=$OPTARG ;;
-            ?) exit 1 ;;
+            ?) echo "Unknown option $opt"; exit 1 ;;
         esac
     done
     print_executables
