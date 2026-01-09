@@ -2,7 +2,6 @@
 
 set -e -u
 
-PATH_TO_EXAMINE=$PATH
 DEDUPLICATE=true
 SUMMARY_PER_DIRECTORY=false
 
@@ -26,7 +25,8 @@ EOF
 
 # Basic PATH validation
 validate_path() {
-    if [ -z "${PATH_TO_EXAMINE+x}" ] || [ -z "$PATH_TO_EXAMINE" ]; then
+    PATH_TO_VALIDATE=$1
+    if [ -z "${PATH_TO_VALIDATE+x}" ] || [ -z "$PATH_TO_VALIDATE" ]; then
         echo "Error: PATH (or custom PATH) is empty or unset" >&2
         exit 1
     fi
@@ -34,8 +34,8 @@ validate_path() {
 
 
 print_executables() {
-
-    validate_path # Validate PATH_TO_EXAMINE
+    PATH_TO_EXAMINE=$1
+    validate_path $PATH_TO_EXAMINE # Validate PATH_TO_EXAMINE
 
     # Deduplicate entries, maintaining directory order, strip trailing colon if present
     $DEDUPLICATE && PATH_TO_EXAMINE=$(printf '%s' "$PATH_TO_EXAMINE" |
@@ -56,6 +56,7 @@ print_executables() {
 }
 
 main() {
+    PATH_TO_EXAMINE=$PATH
     while getopts "husp:-:" opt; do
         case $opt in
             h) send_help; exit 0 ;;
@@ -65,7 +66,8 @@ main() {
             ?) echo "Unknown option $opt" >&2; exit 1 ;;
         esac
     done
-    print_executables
+    
+    print_executables $PATH_TO_EXAMINE
 }
 
 main "$@"
