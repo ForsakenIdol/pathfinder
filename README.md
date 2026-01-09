@@ -1,3 +1,5 @@
+# Pathfinder
+
 Output all the executables available on the system based on the $PATH environment variable. The script is only confirmed to work on GNU / BSH-ish systems, despite the shebang targeting `/bin/sh`.
 
 $PATH doesn't search in subdirectories.
@@ -16,7 +18,9 @@ Possible arguments:
     -h, --help
         display this help and exit
 
+```
 shellcheck --shell=sh pathfinder.sh
+```
 
 `set -euo pipefail` enables "strict mode":
     -e (errexit): Script exits immediately on any command's non-zero exit status, preventing error propagation; exceptions include conditionals and command lists.
@@ -35,6 +39,7 @@ I've replaced the `| sort | uniq` pipe fix with the `DEDUP_PATH` assignment with
 3. If the directory is new to `awk`, add it to the `seen` associative array, then print it.
 4. Rejoin the output using the Output Record Separator (ORS=:).
 
-Misc. Notes:
-    - SC3040 (warning): In POSIX sh, set option pipefail (set -o pipefail) is undefined. We can't use it in an sh-compatible script.
-    - 
+## Misc. Notes:
+
+- SC3040 (warning): In POSIX sh, set option pipefail (set -o pipefail) is undefined. We can't use it in an sh-compatible script.
+- 
