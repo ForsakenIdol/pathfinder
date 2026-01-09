@@ -5,6 +5,7 @@ set -e -u
 DEDUPLICATE=true
 SUMMARY_PER_DIRECTORY=false
 EFFECTIVE_EXECUTABLES_ONLY=false
+RANDOM_MODE=false
 
 send_help() {
     cat << 'EOF'
@@ -44,10 +45,15 @@ print_executables() {
         PATH_TO_EXAMINE="${PATH_TO_EXAMINE%:}" # ${VAR%PATTERN} removes PATTERN from the end of VAR if present
     fi
 
-    if [ "$EFFECTIVE_EXECUTABLES_ONLY" = true ]; then
+    old_ifs=$IFS
+    IFS=: # Change the default character used to split a string to a colon ':'
+    if [ "$RANDOM_MODE" = true ]; then
+        for PATHNAME in $PATH_TO_EXAMINE; do
+            test -d "$PATHNAME" || continue
+            find "$PATHNAME" -maxdepth 1 -type f -executable -print
+        done | shuf -n 1
+    elif [ "$EFFECTIVE_EXECUTABLES_ONLY" = true ]; then
         # Collect ALL the executables first, before identifying effective executables by basename
-        old_ifs=$IFS
-        IFS=:
         for PATHNAME in $PATH_TO_EXAMINE; do
             test -d "$PATHNAME" || continue
             find "$PATHNAME" -maxdepth 1 -type f -executable -print
@@ -61,10 +67,7 @@ print_executables() {
         # The +1 is to avoid the last forward slash '/' being part of the match
         # awk only prints the executable's full path if it hasn't seen that executable name before
         # This matches the behavior when Linux searches for a specific executable; it uses only the first one it finds
-        IFS=$old_ifs
     else
-        old_ifs=$IFS
-        IFS=: # Change the default character used to split a string to a colon ':'
         for PATHNAME in $PATH_TO_EXAMINE; do
             test -d "$PATHNAME" || continue # If $PATHNAME is not a directory, then continue to the next path name
             if $SUMMARY_PER_DIRECTORY; then
@@ -73,19 +76,20 @@ print_executables() {
                 find "$PATHNAME" -maxdepth 1 -type f -executable -print
             fi
         done
-        IFS=$old_ifs # Reset to original IFS character
     fi
+    IFS=$old_ifs # Reset to original IFS character
 }
 
 main() {
     PATH_TO_EXAMINE=$PATH
-    while getopts "husep:-:" opt; do
+    while getopts "huserp:-:" opt; do
         case $opt in
             h) send_help; exit 0 ;;
             u) DEDUPLICATE=false ;;
             p) PATH_TO_EXAMINE=$OPTARG ;;
             s) SUMMARY_PER_DIRECTORY=true ;;
             e) EFFECTIVE_EXECUTABLES_ONLY=true ;;
+            r) RANDOM_MODE=true ;;
             ?) echo "Unknown option $opt" >&2; exit 1 ;;
         esac
     done
