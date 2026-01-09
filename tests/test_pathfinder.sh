@@ -9,6 +9,18 @@ TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT # Cleanup before script exits
 EXECUTABLE_NAME=pathfinder.sh
 
+########## HELPER FUNCTIONS ##########
+
+given_test_directories() {
+    mkdir -p "$TEMP_DIR/bin1" "$TEMP_DIR/bin2"
+    touch "$TEMP_DIR/bin1/ls" "$TEMP_DIR/bin1/cat" 
+    chmod +x "$TEMP_DIR/bin1"/*
+    touch "$TEMP_DIR/bin2/foo" 
+    chmod +x "$TEMP_DIR/bin2/foo"
+}
+
+########## TESTS ##########
+
 test_basic() {
     # Given: $PATH exists
     # When: pathfinder is called with defaults
@@ -20,11 +32,7 @@ test_basic() {
 
 test_known_path() {
     # Given
-    mkdir -p "$TEMP_DIR/bin1" "$TEMP_DIR/bin2"
-    touch "$TEMP_DIR/bin1/ls" "$TEMP_DIR/bin1/cat" 
-    chmod +x "$TEMP_DIR/bin1"/*
-    touch "$TEMP_DIR/bin2/foo" 
-    chmod +x "$TEMP_DIR/bin2/foo"
+    given_test_directories
 
     # When
     ./$EXECUTABLE_NAME -p "$TEMP_DIR/bin1:$TEMP_DIR/bin2" > output.txt
@@ -44,5 +52,20 @@ test_known_path() {
     rm output.txt
 }
 
+# If deduplication is toggled off, we should see a clear difference
+test_no_dedupe() {
+    # Given
+    given_test_directories
+    TEST_PATH="$TEMP_DIR/bin1:$TEMP_DIR/bin2"
+    NO_DUPE=$(./$EXECUTABLE_NAME -p "$TEST_PATH:$TEST_PATH" | wc -l)
+    WITH_DUPE=$(./$EXECUTABLE_NAME -p "$TEST_PATH:$TEST_PATH" -u | wc -l)
+    if [ "$WITH_DUPE" -eq $((NO_DUPE * 2)) ]; then
+       echo "✓ (3) Deduplication check OK" # Success
+    else
+        echo "✗ (3) Deduplication check FAIL"
+    fi
+}
+
 test_basic
 test_known_path
+test_no_dedupe
