@@ -7,7 +7,7 @@ DEDUPLICATE=true
 SUMMARY_PER_DIRECTORY=false
 
 send_help() {
-    echo """
+    cat << 'EOF'
 Usage:
     -p, --path=PATH
         use a custom PATH value instead of the one set in the shell's environment
@@ -21,7 +21,7 @@ Usage:
         print only the number of executables in each directory in PATH (summary mode)
     -h, --help
         display this help and exit
-    """
+EOF
 }
 
 # Basic PATH validation
