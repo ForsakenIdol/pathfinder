@@ -45,4 +45,5 @@ I've replaced the `| sort | uniq` pipe fix with the `DEDUP_PATH` assignment with
 ## Misc. Notes:
 
 - SC3040 (warning): In POSIX sh, set option pipefail (set -o pipefail) is undefined. We can't use it in an sh-compatible script.
-- 
+- With `getopts`, options requiring an argument should be immediately suffixed with a colon ':'. For example, if the optstring is `"a:b:cd:"`, only option `c` does not require an argument.
+    - The special case of `"-:"` is used to support long-form arguments in its own case inside a `getopts` switch block.

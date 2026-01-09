@@ -1,0 +1,3 @@
+/tmp/tmp.MLHE9ZJm7g/bin1/cat
+/tmp/tmp.MLHE9ZJm7g/bin1/ls
+/tmp/tmp.MLHE9ZJm7g/bin2/foo
