@@ -91,7 +91,29 @@ test_summary_mode() {
     rm $TMP_OUTPUT_FILE
 }
 
+test_effective_executables_only() {
+    # Given
+    mkdir -p "$TEMP_DIR/dup1" "$TEMP_DIR/dup2"
+    touch "$TEMP_DIR/dup1/ls" && chmod +x "$TEMP_DIR/dup1/ls"
+    touch "$TEMP_DIR/dup2/ls" && chmod +x "$TEMP_DIR/dup2/ls"
+
+    # When
+    TMP_OUTPUT_FILE=output.txt
+    ./pathfinder.sh -p "$TEMP_DIR/dup1:$TEMP_DIR/dup2" -e > "$TMP_OUTPUT_FILE"
+
+    # Then
+    if grep -q "$TEMP_DIR/dup1/ls" "$TMP_OUTPUT_FILE" && ! grep -q "$TEMP_DIR/dup2/ls" "$TMP_OUTPUT_FILE" ; then
+        echo "✓ (5) Effective mode OK"
+    else
+        echo "✗ (5) Effective mode FAIL"
+    fi
+
+    # Cleanup
+    rm "$TMP_OUTPUT_FILE"
+}
+
 test_basic
 test_known_path
 test_no_dedupe
 test_summary_mode
+test_effective_executables_only
