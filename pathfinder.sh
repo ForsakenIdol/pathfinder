@@ -4,6 +4,7 @@ set -e -u
 
 PATH_TO_EXAMINE=$PATH
 DEDUPLICATE=true
+SUMMARY_PER_DIRECTORY=false
 
 send_help() {
     echo """
@@ -33,17 +34,22 @@ print_executables() {
     IFS=: # Change the default character used to split a string to a colon ':'
     for PATHNAME in $PATH_TO_EXAMINE; do
         test -d "$PATHNAME" || continue # If $PATHNAME is not a directory, then continue to the next path name
-        find "$PATHNAME" -maxdepth 1 -type f -executable -print
+        if $SUMMARY_PER_DIRECTORY; then
+            echo "$PATHNAME $(find "$PATHNAME" -maxdepth 1 -type f -executable -print | wc -l)"
+        else
+            find "$PATHNAME" -maxdepth 1 -type f -executable -print
+        fi
     done
     IFS=$old_ifs # Reset to original IFS character
 }
 
 main() {
-    while getopts "hup:-:" opt; do
+    while getopts "husp:-:" opt; do
         case $opt in
             h) send_help; exit 0 ;;
             u) DEDUPLICATE=false ;;
             p) PATH_TO_EXAMINE=$OPTARG ;;
+            s) SUMMARY_PER_DIRECTORY=true ;;
             ?) echo "Unknown option $opt"; exit 1 ;;
         esac
     done
