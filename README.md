@@ -2,7 +2,7 @@
 
 Output all the executables available on the system based on the $PATH environment variable. The script is only confirmed to work on GNU / BSH-ish systems, despite the shebang targeting `/bin/sh`.
 
-$PATH doesn't search in subdirectories.
+$PATH doesn't search in subdirectories. This tool therefore does not recurse, nor does it expect anything other than directories to be present in the $PATH.
 
 Possible arguments:
 ```

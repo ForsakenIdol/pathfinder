@@ -17,7 +17,7 @@ Usage:
     -r, --random
         output a random executable from the list
     -s, --summary
-        print only the number of executables in each directory in PATH (summary mode)
+        print only the number of executables in each directory in PATH (summary mode); if this flag is set, then the -e / --effective flag is ignored
     -h, --help
         display this help and exit
 EOF
@@ -43,7 +43,7 @@ print_executables() {
                           awk -v RS=: -v ORS=: '!($0 in seen) { seen[$0] = 1; print $0 }')
         PATH_TO_EXAMINE="${PATH_TO_EXAMINE%:}" # ${VAR%PATTERN} removes PATTERN from the end of VAR if present
     fi
-                    
+
     old_ifs=$IFS
     IFS=: # Change the default character used to split a string to a colon ':'
     for PATHNAME in $PATH_TO_EXAMINE; do
