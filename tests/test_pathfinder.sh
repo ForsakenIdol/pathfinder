@@ -79,7 +79,7 @@ test_summary_mode() {
 
     # When
     TMP_OUTPUT_FILE=output.txt
-    ./$EXECUTABLE_NAME -p $TEST_PATH -s > $TMP_OUTPUT_FILE
+    ./$EXECUTABLE_NAME -p "$TEST_PATH" -s > $TMP_OUTPUT_FILE
 
     # Then
     if grep -q "$TEMP_DIR/bin1 2" $TMP_OUTPUT_FILE && grep -q "$TEMP_DIR/bin2 1" $TMP_OUTPUT_FILE; then

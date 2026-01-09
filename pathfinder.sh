@@ -44,7 +44,7 @@ print_executables() {
         PATH_TO_EXAMINE="${PATH_TO_EXAMINE%:}" # ${VAR%PATTERN} removes PATTERN from the end of VAR if present
     fi
 
-    if "$EFFECTIVE_EXECUTABLES_ONLY"; then
+    if [ "$EFFECTIVE_EXECUTABLES_ONLY" = true ]; then
         # Collect ALL the executables first, before identifying effective executables by basename
         old_ifs=$IFS
         IFS=:
@@ -57,6 +57,10 @@ print_executables() {
                 if (!seen[name_of_executable]++) print $0
             }
         '
+        # The awk statement above matches the last part of the executable, so it has only the executable's name
+        # The +1 is to avoid the last forward slash '/' being part of the match
+        # awk only prints the executable's full path if it hasn't seen that executable name before
+        # This matches the behavior when Linux searches for a specific executable; it uses only the first one it finds
         IFS=$old_ifs
     else
         old_ifs=$IFS
