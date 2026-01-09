@@ -22,10 +22,12 @@ given_test_directories() {
 ########## TESTS ##########
 
 test_basic() {
-    # Given: $PATH exists
-    # When: pathfinder is called with defaults
+    # Given: test directories
+    given_test_directories
+
+    # When: pathfinder is called with the rest of the defaults
     # Then: pathfinder produces any output
-    test -n "$(./$EXECUTABLE_NAME)" &&
+    test -n "$(./$EXECUTABLE_NAME -p "$TEMP_DIR/bin1:$TEMP_DIR/bin2")" &&
     echo "✓ (1) Basic output OK" ||
     echo "✗ (1) Basic output FAIL"
 }
@@ -40,7 +42,7 @@ test_known_path() {
     # Then
     EXPECTED_BIN1="^$TEMP_DIR/bin1/(cat|ls)\$"
     EXPECTED_BIN2="$TEMP_DIR/bin2/foo"
-    if [ "$(cat output.txt | wc -l)" -eq 3 ] &&
+    if [ "$(wc -l < output.txt)" -eq 3 ] &&
        grep -qE "$EXPECTED_BIN1" output.txt &&
        grep -q "$EXPECTED_BIN2" output.txt; then
        echo "✓ (2) Known path OK" # Success
