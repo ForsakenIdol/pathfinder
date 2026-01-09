@@ -30,6 +30,7 @@ test_known_path() {
         echo "✗ (1) Known path FAIL"
     fi
     
+    rm output.txt
 }
 
 test_known_path
