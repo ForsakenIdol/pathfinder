@@ -59,8 +59,12 @@ test_no_dedupe() {
     # Given
     given_test_directories
     TEST_PATH="$TEMP_DIR/bin1:$TEMP_DIR/bin2"
+
+    # When
     NO_DUPE=$(./$EXECUTABLE_NAME -p "$TEST_PATH:$TEST_PATH" | wc -l)
     WITH_DUPE=$(./$EXECUTABLE_NAME -p "$TEST_PATH:$TEST_PATH" -u | wc -l)
+
+    # Then
     if [ "$WITH_DUPE" -eq $((NO_DUPE * 2)) ]; then
        echo "✓ (3) Deduplication check OK" # Success
     else
@@ -68,6 +72,26 @@ test_no_dedupe() {
     fi
 }
 
+test_summary_mode() {
+    # Given
+    given_test_directories
+    TEST_PATH="$TEMP_DIR/bin1:$TEMP_DIR/bin2"
+
+    # When
+    TMP_OUTPUT_FILE=output.txt
+    ./$EXECUTABLE_NAME -p $TEST_PATH -s > $TMP_OUTPUT_FILE
+
+    # Then
+    if grep -q "$TEMP_DIR/bin1 2" $TMP_OUTPUT_FILE && grep -q "$TEMP_DIR/bin2 1" $TMP_OUTPUT_FILE; then
+       echo "✓ (4) Summary mode OK" # Success
+    else
+        echo "✗ (4) Summary mode FAIL"
+    fi
+
+    rm $TMP_OUTPUT_FILE
+}
+
 test_basic
 test_known_path
 test_no_dedupe
+test_summary_mode
