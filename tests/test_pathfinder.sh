@@ -7,7 +7,7 @@
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT # Cleanup before script exits
-EXECUTABLE_NAME=pathfinder.sh
+EXECUTABLE_NAME=pathfinder
 
 ########## HELPER FUNCTIONS ##########
 
@@ -99,7 +99,7 @@ test_effective_executables_only() {
 
     # When
     TMP_OUTPUT_FILE=output.txt
-    ./pathfinder.sh -p "$TEMP_DIR/dup1:$TEMP_DIR/dup2" -e > "$TMP_OUTPUT_FILE"
+    ./$EXECUTABLE_NAME -p "$TEMP_DIR/dup1:$TEMP_DIR/dup2" -e > "$TMP_OUTPUT_FILE"
 
     # Then
     if grep -q "$TEMP_DIR/dup1/ls" "$TMP_OUTPUT_FILE" && ! grep -q "$TEMP_DIR/dup2/ls" "$TMP_OUTPUT_FILE" ; then
@@ -116,7 +116,7 @@ test_empty_path() {
     # Given: Malformed PATH
     # When: Script uses malformed PATH
     # Then: Script executes with non-zero exit code
-    if ./pathfinder.sh -p "" 2>&1 | grep -q "Error"; then
+    if ./$EXECUTABLE_NAME -p "" 2>&1 | grep -q "Error"; then
         echo "✓ (6) Malformed path check OK"
     else
         echo "✗ (6) Malformed path check FAIL"
