@@ -17,11 +17,13 @@ Usage:
     -e
         for duplicate executables in multiple locations, keep only the effective one that will be used when the executable is called directly
     -r
-        output a random executable from the list, will override the -s and -e output modes if either of these are set
+        output a random entry from the list
     -s
-        print only the number of executables in each directory in PATH (summary mode); this flag is ignored when -e is set
+        print only the number of executables in each directory in PATH (summary mode)
     -h
         display this help and exit
+
+Note that the -s and -e flags are incompatible with each other and will produce invalid results if used together.
 EOF
 }
 
