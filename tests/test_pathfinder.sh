@@ -112,8 +112,20 @@ test_effective_executables_only() {
     rm "$TMP_OUTPUT_FILE"
 }
 
+test_empty_path() {
+    # Given: Malformed PATH
+    # When: Script uses malformed PATH
+    # Then: Script executes with non-zero exit code
+    if ./pathfinder.sh -p "" 2>&1 | grep -q "Error"; then
+        echo "✓ (6) Malformed path check OK"
+    else
+        echo "✗ (6) Malformed path check FAIL"
+    fi
+}
+
 test_basic
 test_known_path
 test_no_dedupe
 test_summary_mode
 test_effective_executables_only
+test_empty_path

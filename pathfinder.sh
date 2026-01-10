@@ -27,8 +27,11 @@ EOF
 
 # Basic PATH validation
 validate_path() {
-    PATH_TO_VALIDATE=$1
-    if [ -z "${PATH_TO_VALIDATE+x}" ] || [ -z "$PATH_TO_VALIDATE" ]; then
+    # Unset variables expand to an empty string
+    # We don't test for colon presence because PATH is still valid even if it only consists of a single directory.
+    # Additionally, while ill-advised and a huge security risk, PATH=. is also valid.
+    # This means we can't check for forward slash '/' characters as they don't need to be present in a valid PATH.
+    if [ "$1" = "" ]; then
         echo "Error: PATH (or custom PATH) is empty or unset" >&2
         exit 1
     fi
@@ -39,7 +42,7 @@ print_executables() {
     validate_path "$PATH_TO_EXAMINE" # Validate PATH_TO_EXAMINE
 
     # Deduplicate entries, maintaining directory order, strip trailing colon if present
-    if $DEDUPLICATE; then
+    if [ "$DEDUPLICATE" = true ]; then
         PATH_TO_EXAMINE=$(printf '%s' "$PATH_TO_EXAMINE" |
                           awk -v RS=: -v ORS=: '!($0 in seen) { seen[$0] = 1; print $0 }')
         PATH_TO_EXAMINE="${PATH_TO_EXAMINE%:}" # ${VAR%PATTERN} removes PATTERN from the end of VAR if present
@@ -60,7 +63,7 @@ print_executables() {
         done | awk '
             {
                 name_of_executable = substr($0, match($0, "/[^/]*$") + 1)
-                if (!seen[name_of_executable]++) print $0
+                if (!already_seen[name_of_executable]++) print $0
             }
         '
         # The awk statement above matches the last part of the executable, so it has only the executable's name
