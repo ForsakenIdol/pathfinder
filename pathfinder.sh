@@ -27,14 +27,24 @@ EOF
 
 # Basic PATH validation
 validate_path() {
-    # Unset variables expand to an empty string
     # We don't test for colon presence because PATH is still valid even if it only consists of a single directory.
     # Additionally, while ill-advised and a huge security risk, PATH=. is also valid.
     # This means we can't check for forward slash '/' characters as they don't need to be present in a valid PATH.
-    if [ "$1" = "" ]; then
+    if [ "$1" = "" ]; then # Unset variables expand to an empty string, simplifying this check
         echo "Error: PATH (or custom PATH) is empty or unset" >&2
         exit 1
     fi
+}
+
+list_execs() {
+for PATHNAME in $PATH_TO_EXAMINE; do
+    test -d "$PATHNAME" || continue # If $PATHNAME is not a directory, then continue to the next path name
+    if $SUMMARY_PER_DIRECTORY; then
+        echo "$PATHNAME $(find "$PATHNAME" -maxdepth 1 -type f -executable -print | wc -l)"
+    else
+        find "$PATHNAME" -maxdepth 1 -type f -executable -print
+    fi
+done
 }
 
 print_executables() {
@@ -51,16 +61,10 @@ print_executables() {
     old_ifs=$IFS
     IFS=: # Change the default character used to split a string to a colon ':'
     if [ "$RANDOM_MODE" = true ]; then
-        for PATHNAME in $PATH_TO_EXAMINE; do
-            test -d "$PATHNAME" || continue
-            find "$PATHNAME" -maxdepth 1 -type f -executable -print
-        done | shuf -n 1
+        list_execs | shuf -n 1
     elif [ "$EFFECTIVE_EXECUTABLES_ONLY" = true ]; then
         # Collect ALL the executables first, before identifying effective executables by basename
-        for PATHNAME in $PATH_TO_EXAMINE; do
-            test -d "$PATHNAME" || continue
-            find "$PATHNAME" -maxdepth 1 -type f -executable -print
-        done | awk '
+        list_execs | awk '
             {
                 name_of_executable = substr($0, match($0, "/[^/]*$") + 1)
                 if (!already_seen[name_of_executable]++) print $0
@@ -71,14 +75,7 @@ print_executables() {
         # awk only prints the executable's full path if it hasn't seen that executable name before
         # This matches the behavior when Linux searches for a specific executable; it uses only the first one it finds
     else
-        for PATHNAME in $PATH_TO_EXAMINE; do
-            test -d "$PATHNAME" || continue # If $PATHNAME is not a directory, then continue to the next path name
-            if $SUMMARY_PER_DIRECTORY; then
-                echo "$PATHNAME $(find "$PATHNAME" -maxdepth 1 -type f -executable -print | wc -l)"
-            else
-                find "$PATHNAME" -maxdepth 1 -type f -executable -print
-            fi
-        done
+        list_execs
     fi
     IFS=$old_ifs # Reset to original IFS character
 }
@@ -96,7 +93,6 @@ main() {
             ?) echo "Unknown option $opt" >&2; exit 1 ;;
         esac
     done
-
     print_executables "$PATH_TO_EXAMINE"
 }
 
