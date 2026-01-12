@@ -1,25 +1,31 @@
 name: execute-test-scripts
-on: push
+on:
+  push:
+    branches:
+        - main
+  pull_request:
+    branches:
+        - main
 jobs:
-    test-script-functionality:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+  test-script-functionality:
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4
 
-            - name: Run test script
-              run: ./tests/test_pathfinder.sh
+          - name: Run test script
+            run: ./tests/test_pathfinder.sh
 
-    shellcheck-syntax:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
-            
-            - name: Run shellcheck on pathfinder script
-              run: shellcheck --shell=sh pathfinder
+  shellcheck-syntax:
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout repository
+            uses: actions/checkout@v4
+          
+          - name: Run shellcheck on pathfinder script
+            run: shellcheck --shell=sh pathfinder
 
-            - name: Run shellcheck on test_pathfinder script
-              run: shellcheck --shell=sh tests/test_pathfinder.sh
+          - name: Run shellcheck on test_pathfinder script
+            run: shellcheck --shell=sh tests/test_pathfinder.sh
 
                 
