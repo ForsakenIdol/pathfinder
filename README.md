@@ -29,7 +29,9 @@ Possible arguments:
         display this help and exit
 ```
 
-Note: Long-form arguments are currently unsupported.
+Note:
+- The `-s` and `-e` flags are incompatible with each other and will produce invalid results if used together. This is due to the implementation of the `-e` flag, which uses directory splitting to find the executable name, given the full path to the executable.
+- Long-form arguments are currently unsupported, but these are planned for future releases.
 
 ## Testing
 
