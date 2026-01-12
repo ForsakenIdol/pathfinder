@@ -35,6 +35,17 @@ Note:
 - The `-s` and `-e` flags are incompatible with each other and will produce invalid results if used together. This is due to the implementation of the `-e` flag, which uses directory splitting to find the executable name, given the full path to the executable.
 - Long-form arguments are currently unsupported, but these are planned for future releases.
 
+## Build (Debian)
+
+To build the `pathfinder` utility from source for a Debian system, execute the `build.sh` script, ensuring your system has all required dependencies.
+
+```sh
+sudo apt install dh-make devscripts
+./build.sh
+```
+
+This will provide you with a `.deb` package you can install with `dpkg`.
+
 ## Testing
 
 Tests should go into the `tests/` directory. Included in this repository is a basic test script `test_pathfinder.sh` which ensures that this tool maintains basic functionality for all flags (except `-r`).
