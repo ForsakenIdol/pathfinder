@@ -1,5 +1,7 @@
 # Pathfinder
 
+[![execute-test-scripts](https://github.com/ForsakenIdol/pathfinder/actions/workflows/test.yaml/badge.svg?branch=main)](https://github.com/ForsakenIdol/pathfinder/actions/workflows/test.yaml)
+
 Output all the executables available on the system based on the $PATH environment variable. The script is only confirmed to work on GNU / BSH-ish systems, despite the shebang targeting `/bin/sh`.
 
 Directories in `PATH` are not recursed upon on Linux when searching for an executable. This tool therefore does not recurse, nor does it expect anything other than directories to be present in `PATH`.
