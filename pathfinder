@@ -40,7 +40,7 @@ validate_path() {
 
 list_execs() {
 for PATHNAME in $PATH_TO_EXAMINE; do
-    test -d "$PATHNAME" || continue # If $PATHNAME is not a directory, then continue to the next path name
+    test -d "$PATHNAME" || continue
     if $SUMMARY_PER_DIRECTORY; then
         echo "$PATHNAME $(find "$PATHNAME" -maxdepth 1 -type f -executable -print | wc -l)"
     else
@@ -51,7 +51,7 @@ done
 
 print_executables() {
     PATH_TO_EXAMINE=$1
-    validate_path "$PATH_TO_EXAMINE" # Validate PATH_TO_EXAMINE
+    validate_path "$PATH_TO_EXAMINE"
 
     # Deduplicate entries, maintaining directory order, strip trailing colon if present
     if [ "$DEDUPLICATE" = true ]; then
@@ -61,7 +61,7 @@ print_executables() {
     fi
 
     old_ifs=$IFS
-    IFS=: # Change the default character used to split a string to a colon ':'
+    IFS=:
     if [ "$RANDOM_MODE" = true ]; then list_execs | shuf -n 1
     elif [ "$EFFECTIVE_EXECUTABLES_ONLY" = true ]; then
         # Collect ALL the executables first, before identifying effective executables by basename
@@ -71,13 +71,9 @@ print_executables() {
                 if (!already_seen[name_of_executable]++) print $0
             }
         '
-        # The awk statement above matches the last part of the executable, so it has only the executable's name
-        # The +1 is to avoid the last forward slash '/' being part of the match
-        # awk only prints the executable's full path if it hasn't seen that executable name before
-        # This matches the behavior when Linux searches for a specific executable; it uses only the first one it finds
     else list_execs
     fi
-    IFS=$old_ifs # Reset to original IFS character
+    IFS=$old_ifs
 }
 
 main() {
