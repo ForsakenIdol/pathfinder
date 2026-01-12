@@ -44,7 +44,9 @@ sudo apt install dh-make devscripts
 ./build.sh
 ```
 
-This will provide you with a `.deb` package you can install with `dpkg`.
+This will provide you with a `.deb` package you can install with `dpkg` or `apt`.
+
+Currently, the `build.sh` script only works for Debian-based systems.
 
 ## Testing
 

@@ -54,10 +54,15 @@ pathfinder (0.1.0-1) UNRELEASED; urgency=medium
  -- ForsakenIdol <forsaken.idol929@gmail.com>  Mon, 12 Jan 2026 17:36:50 +0800
 EOF
 
-# Build unsigned, ignore change file
+# Build unsigned, ignores change file
 debuild -us -uc
 
-# Cleanup
+# Move build artifacts other than `.deb` into their own directory
 cd ..
+mkdir -p artifacts
+mv pathfinder_* artifacts/
+mv artifacts/*.deb .
+
+# Cleanup temp artifacts
 rm -rf "$TAR_NAME"
 rm -rf "$DIR_NAME"
