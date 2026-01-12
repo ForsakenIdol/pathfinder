@@ -27,9 +27,13 @@ test_basic() {
 
     # When: pathfinder is called with the rest of the defaults
     # Then: pathfinder produces any output
-    test -n "$(./$EXECUTABLE_NAME -p "$TEMP_DIR/bin1:$TEMP_DIR/bin2")" &&
-    echo "✓ (1) Basic output OK" ||
-    echo "✗ (1) Basic output FAIL"
+    if test -n "$(./$EXECUTABLE_NAME -p "$TEMP_DIR/bin1:$TEMP_DIR/bin2")"; then
+        echo "✓ (1) Basic output OK"
+    else
+        echo "✗ (1) Basic output FAIL"
+        exit 1
+    fi
+
 }
 
 test_known_path() {
@@ -48,6 +52,7 @@ test_known_path() {
        echo "✓ (2) Known path OK" # Success
     else
         echo "✗ (2) Known path FAIL"
+        exit 1
     fi
     
     # Cleanup
@@ -69,6 +74,7 @@ test_no_dedupe() {
        echo "✓ (3) Deduplication check OK" # Success
     else
         echo "✗ (3) Deduplication check FAIL"
+        exit 1
     fi
 }
 
@@ -86,6 +92,7 @@ test_summary_mode() {
        echo "✓ (4) Summary mode OK" # Success
     else
         echo "✗ (4) Summary mode FAIL"
+        exit 1
     fi
 
     rm $TMP_OUTPUT_FILE
@@ -106,6 +113,7 @@ test_effective_executables_only() {
         echo "✓ (5) Effective mode OK"
     else
         echo "✗ (5) Effective mode FAIL"
+        exit 1
     fi
 
     # Cleanup
@@ -120,6 +128,7 @@ test_empty_path() {
         echo "✓ (6) Malformed path check OK"
     else
         echo "✗ (6) Malformed path check FAIL"
+        exit 1
     fi
 }
 
