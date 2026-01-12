@@ -7,7 +7,7 @@
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT # Cleanup before script exits
-EXECUTABLE_NAME=pathfinder
+EXECUTABLE="./pathfinder"
 
 ########## HELPER FUNCTIONS ##########
 
@@ -27,7 +27,7 @@ test_basic() {
 
     # When: pathfinder is called with the rest of the defaults
     # Then: pathfinder produces any output
-    if test -n "$(./$EXECUTABLE_NAME -p "$TEMP_DIR/bin1:$TEMP_DIR/bin2")"; then
+    if test -n "$($EXECUTABLE -p "$TEMP_DIR/bin1:$TEMP_DIR/bin2")"; then
         echo "✓ (1) Basic output OK"
     else
         echo "✗ (1) Basic output FAIL"
@@ -41,7 +41,7 @@ test_known_path() {
     given_test_directories
 
     # When
-    ./$EXECUTABLE_NAME -p "$TEMP_DIR/bin1:$TEMP_DIR/bin2" > output.txt
+    $EXECUTABLE -p "$TEMP_DIR/bin1:$TEMP_DIR/bin2" > output.txt
 
     # Then
     EXPECTED_BIN1="^$TEMP_DIR/bin1/(cat|ls)\$"
@@ -66,8 +66,8 @@ test_no_dedupe() {
     TEST_PATH="$TEMP_DIR/bin1:$TEMP_DIR/bin2"
 
     # When
-    NO_DUPE=$(./$EXECUTABLE_NAME -p "$TEST_PATH:$TEST_PATH" | wc -l)
-    WITH_DUPE=$(./$EXECUTABLE_NAME -p "$TEST_PATH:$TEST_PATH" -u | wc -l)
+    NO_DUPE=$($EXECUTABLE -p "$TEST_PATH:$TEST_PATH" | wc -l)
+    WITH_DUPE=$($EXECUTABLE -p "$TEST_PATH:$TEST_PATH" -u | wc -l)
 
     # Then
     if [ "$WITH_DUPE" -eq $((NO_DUPE * 2)) ]; then
@@ -85,7 +85,7 @@ test_summary_mode() {
 
     # When
     TMP_OUTPUT_FILE=output.txt
-    ./$EXECUTABLE_NAME -p "$TEST_PATH" -s > $TMP_OUTPUT_FILE
+    $EXECUTABLE -p "$TEST_PATH" -s > $TMP_OUTPUT_FILE
 
     # Then
     if grep -q "$TEMP_DIR/bin1 2" $TMP_OUTPUT_FILE && grep -q "$TEMP_DIR/bin2 1" $TMP_OUTPUT_FILE; then
@@ -106,7 +106,7 @@ test_effective_executables_only() {
 
     # When
     TMP_OUTPUT_FILE=output.txt
-    ./$EXECUTABLE_NAME -p "$TEMP_DIR/dup1:$TEMP_DIR/dup2" -e > "$TMP_OUTPUT_FILE"
+    $EXECUTABLE -p "$TEMP_DIR/dup1:$TEMP_DIR/dup2" -e > "$TMP_OUTPUT_FILE"
 
     # Then
     if grep -q "$TEMP_DIR/dup1/ls" "$TMP_OUTPUT_FILE" && ! grep -q "$TEMP_DIR/dup2/ls" "$TMP_OUTPUT_FILE" ; then
@@ -124,7 +124,7 @@ test_empty_path() {
     # Given: Malformed PATH
     # When: Script uses malformed PATH
     # Then: Script executes with non-zero exit code
-    if ./$EXECUTABLE_NAME -p "" 2>&1 | grep -q "Error"; then
+    if $EXECUTABLE -p "" 2>&1 | grep -q "Error"; then
         echo "✓ (6) Malformed path check OK"
     else
         echo "✗ (6) Malformed path check FAIL"
