@@ -2,12 +2,12 @@
 
 ##################################################
 # Minimal TAP harness for Pathfinder
-# Developed by: ForsakenIdol
 ##################################################
 
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT # Cleanup before script exits
-EXECUTABLE="./pathfinder"
+# Pass a custom executable name or just call the script directly from the directory containing the pathfinder script
+EXECUTABLE="${1:-./pathfinder}"
 
 ########## HELPER FUNCTIONS ##########
 
