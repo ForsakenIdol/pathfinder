@@ -4,12 +4,6 @@ about: "Suggest changes and improvements to the Pathfinder project."
 title: "[Refactor] <short title>"
 labels: ["refactor", "needs-triage"]
 assignees: []
-
-body:
-  - type: markdown
-    attributes:
-      value: |
-        Propose refactoring to improve maintainability, performance, or clarity.
 ---
 
 # Refactor Request

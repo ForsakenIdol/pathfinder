@@ -12,13 +12,12 @@ TAR_NAME="$TOOL_NAME"_$VERSION.orig.tar.gz
 
 # Tarball
 mkdir -p "$DIR_NAME/debian"
-cp ./pathfinder ./tests/test_pathfinder.sh ./"$DIR_NAME"
-cp LICENSE ./"$DIR_NAME"/debian
+cp ./pathfinder ./tests/test_pathfinder.sh LICENSE ./"$DIR_NAME"
 tar -cz -f $TAR_NAME $DIR_NAME
 
 # Make package outline
 cd "$DIR_NAME"
-dh_make -i -a -c custom --copyrightfile LICENSE -y
+dh_make -i -a -c custom --copyrightfile ../LICENSE -y
 rm -rf debian/*.ex # Remove example files
 
 # Add other files as required
