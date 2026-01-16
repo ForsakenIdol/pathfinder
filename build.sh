@@ -26,6 +26,9 @@ cat << "EOF" > debian/install
 pathfinder /usr/bin
 test_pathfinder.sh /usr/share/doc/pathfinder/tests/
 EOF
+cat << "EOF" > debian/links
+/usr/bin/pathfinder /usr/bin/pf
+EOF
 cat << "EOF" > debian/control
 Source: pathfinder
 Section: unknown

@@ -8,11 +8,14 @@ Directories in `PATH` are not recursed upon on Linux when searching for an execu
 
 ## Execution
 
-Simply call the `pathfinder` script. With no arguments, `pathfinder` analyzes the shell environment's `PATH` variable and prints out the full path to each executable that can be called directly, based on the current state of the `PATH`.
+Simply call the `pathfinder` script. Alternatively, `pf` symlinks to `pathfinder`.
 
 ```
-./pathfinder
+pathfinder          # Long form
+pf                  # Short form
 ```
+
+With no arguments, `pathfinder` analyzes the shell environment's `PATH` variable and prints out the full path to each executable that can be called directly, based on the current state of the `PATH`.
 
 Possible arguments:
 
@@ -50,4 +53,17 @@ Currently, the `build.sh` script only works for Debian-based systems.
 
 ## Testing
 
-Tests should go into the `tests/` directory. Included in this repository is a basic test script `test_pathfinder.sh` which ensures that this tool maintains basic functionality for all flags (except `-r`).
+Tests should go into the `tests/` directory of this repository.
+
+Included in this repository is a basic test script `test_pathfinder.sh` which ensures that this tool maintains basic functionality for all flags (except `-r`). During tool installation, the script will also be available under `/usr/share/doc/pathfinder`. When called with no arguments, `test_pathfinder.sh` should be called from the same directory as the `pathfinder` script:
+
+```sh
+./tests/test_pathfinder.sh
+```
+
+The `test_pathfinder.sh` also accepts a single argument, the name of or path to the `pathfinder` or `pf` executable to run the tests against.
+
+```sh
+./test_pathfinder.sh pathfinder
+./test_pathfinder.sh pf
+```
