@@ -48,12 +48,12 @@ Description: PATH environment consolidation and enumeration
  Includes tests installed into /usr/share/doc/pathfinder.
 EOF
 # We'll set up a proper pipeline with gbp-dch later, this is just a placeholder
-cat << "EOF" > debian/changelog
+cat << EOF > debian/changelog
 pathfinder (0.1.0-1) UNRELEASED; urgency=medium
 
   * Initial release.
 
- -- ForsakenIdol <forsaken.idol929@gmail.com>  Mon, 12 Jan 2026 17:36:50 +0800
+ -- ForsakenIdol <forsaken.idol929@gmail.com>  $(date -R)
 EOF
 
 # Build unsigned, ignores change file
