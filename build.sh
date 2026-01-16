@@ -11,12 +11,12 @@ DIR_NAME="$TOOL_NAME-$VERSION"
 TAR_NAME="$TOOL_NAME"_$VERSION.orig.tar.gz
 
 # Tarball
-mkdir -p "$DIR_NAME/debian"
+mkdir -p "$DIR_NAME"
 cp ./pathfinder ./tests/test_pathfinder.sh LICENSE ./"$DIR_NAME"
 tar -cz -f $TAR_NAME $DIR_NAME
 
 # Make package outline
-cd "$DIR_NAME"
+cd "$DIR_NAME" && mkdir -p "debian"
 dh_make -i -a -c custom --copyrightfile ../LICENSE -y
 rm -rf debian/*.ex # Remove example files
 
@@ -44,5 +44,4 @@ mv pathfinder_* artifacts/
 mv artifacts/*.deb ./
 
 # Cleanup temp artifacts
-rm -rf "$TAR_NAME"
-rm -rf "$DIR_NAME"
+rm -rf "$TAR_NAME" "$DIR_NAME"
