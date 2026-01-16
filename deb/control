@@ -1,0 +1,16 @@
+Source: pathfinder
+Section: unknown
+Priority: optional
+Maintainer: ForsakenIdol <forsaken.idol929@gmail.com>
+Rules-Requires-Root: no
+Build-Depends: debhelper-compat (= 13),
+Standards-Version: 4.7.2
+Homepage: https://github.com/ForsakenIdol/pathfinder
+
+Package: pathfinder
+Architecture: all
+Depends:
+ ${misc:Depends},
+Description: PATH environment consolidation and enumeration
+ A Linux consolidation and enumeration tool for the PATH environment variable.
+ Includes tests installed into /usr/share/doc/pathfinder.

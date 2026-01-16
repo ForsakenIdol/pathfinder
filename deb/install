@@ -1,0 +1,2 @@
+pathfinder /usr/bin
+test_pathfinder.sh /usr/share/doc/pathfinder/tests/
