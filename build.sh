@@ -21,9 +21,7 @@ dh_make -i -a -c custom --copyrightfile ../LICENSE -y
 rm -rf debian/*.ex # Remove example files
 
 # Add other files as required
-cp ../debian/install debian/install
-cp ../debian/links debian/links
-cp ../debian/control debian/control
+cp ../debian/install ../debian/links ../debian/control debian/
 
 # We'll set up a proper pipeline with gbp-dch later, this is just a placeholder
 cat << EOF > debian/changelog
