@@ -5,10 +5,10 @@ set -e -u
 export DEBFULLNAME="ForsakenIdol"
 export DEBEMAIL="forsaken.idol929@gmail.com"
 TOOL_NAME="pathfinder"
-VERSION=0.1.0
+BUILD_VERSION=0.1.0
 
-DIR_NAME="$TOOL_NAME-$VERSION"
-TAR_NAME="$TOOL_NAME"_$VERSION.orig.tar.gz
+DIR_NAME="$TOOL_NAME-$BUILD_VERSION"
+TAR_NAME="$TOOL_NAME"_$BUILD_VERSION.orig.tar.gz
 
 # Tarball
 mkdir -p "$DIR_NAME"
@@ -21,13 +21,13 @@ dh_make -i -a -c custom --copyrightfile ../LICENSE -y
 rm -rf debian/*.ex # Remove example files
 
 # Add other files as required
-cp ../deb/install debian/install
-cp ../deb/links debian/links
-cp ../deb/control debian/control
+cp ../debian/install debian/install
+cp ../debian/links debian/links
+cp ../debian/control debian/control
 
 # We'll set up a proper pipeline with gbp-dch later, this is just a placeholder
 cat << EOF > debian/changelog
-pathfinder ($VERSION-1) unstable; urgency=medium
+pathfinder ($BUILD_VERSION-1) unstable; urgency=medium
 
   * Initial release of the pathfinder CLI utility.
 
