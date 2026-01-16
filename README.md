@@ -6,6 +6,27 @@ Output all the executables available on the system based on the $PATH environmen
 
 Directories in `PATH` are not recursed upon on Linux when searching for an executable. This tool therefore does not recurse, nor does it expect anything other than directories to be present in `PATH`.
 
+## Installation
+
+There are currently 2 ways to install the `pathfinder` utility. First, you must acquire the `.deb` artifact.
+
+1. Clone this repository and run the build script. See the **Build (Debian)** section below.
+2. Navigate to the GitHub repository's **Releases** tab and download the latest version of the `.deb` artifact.
+
+You can then proceed to installing the `.deb` using your package manager of choice; the most common options for this are `apt` or `dpkg`. For example, to install the `pathfinder_0.1.0-1_all.deb` artifact:
+
+```
+apt install ./pathfinder_0.1.0-1_all.deb
+dpkg -i ./pathfinder_0.1.0-1_all.deb
+```
+
+To remove the `pathfinder` utility:
+
+```
+apt remove pathfinder
+dpkg -r pathfinder
+```
+
 ## Execution
 
 Simply call the `pathfinder` script. Alternatively, `pf` symlinks to `pathfinder`.
@@ -67,3 +88,14 @@ The `test_pathfinder.sh` also accepts a single argument, the name of or path to 
 ./test_pathfinder.sh pathfinder
 ./test_pathfinder.sh pf
 ```
+
+## Tagging
+
+This repository will add a new tag with each new major and minor release of the `.deb` installation artifact. As an example, to push and "freeze" the current state of the `main` branch for release tag `v0.1.0`:
+
+```
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The corresponding `.deb` artifact will then be built locally and uploaded to the release page.
