@@ -1,5 +1,5 @@
 blank_issues_enabled: false
-issue_templates:
+templates:
   - name: "Feature Request"
     description: "Suggest an idea or task for the Pathfinder project."
     filename: feature_request.md
