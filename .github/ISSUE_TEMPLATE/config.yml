@@ -3,3 +3,6 @@ templates:
   - name: "Feature Request"
     description: "Suggest an idea or task for the Pathfinder project."
     filename: feature_request.md
+  - name: "Bug Report"
+    description: "Report an issue with the Pathfinder tool."
+    filename: bug_report.md
