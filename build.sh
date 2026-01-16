@@ -21,37 +21,15 @@ dh_make -i -a -c custom --copyrightfile ../LICENSE -y
 rm -rf debian/*.ex # Remove example files
 
 # Add other files as required
-cat << "EOF" > debian/install
-pathfinder /usr/bin
-test_pathfinder.sh /usr/share/doc/pathfinder/tests/
-EOF
-cat << "EOF" > debian/links
-/usr/bin/pathfinder /usr/bin/pf
-EOF
-cat << "EOF" > debian/control
-Source: pathfinder
-Section: unknown
-Priority: optional
-Maintainer: ForsakenIdol <forsaken.idol929@gmail.com>
-Rules-Requires-Root: no
-Build-Depends:
- debhelper-compat (= 13),
-Standards-Version: 4.7.2
-Homepage: https://github.com/ForsakenIdol/pathfinder
+cp ../deb/install debian/install
+cp ../deb/links debian/links
+cp ../deb/control debian/control
 
-Package: pathfinder
-Architecture: all
-Depends:
- ${misc:Depends},
-Description: PATH environment consolidation and enumeration
- A Linux consolidation and enumeration tool for the PATH environment variable.
- Includes tests installed into /usr/share/doc/pathfinder.
-EOF
 # We'll set up a proper pipeline with gbp-dch later, this is just a placeholder
 cat << EOF > debian/changelog
-pathfinder (0.1.0-1) UNRELEASED; urgency=medium
+pathfinder ($VERSION-1) unstable; urgency=medium
 
-  * Initial release.
+  * Initial release of the pathfinder CLI utility.
 
  -- ForsakenIdol <forsaken.idol929@gmail.com>  $(date -R)
 EOF
@@ -63,7 +41,7 @@ debuild -us -uc
 cd ..
 mkdir -p artifacts
 mv pathfinder_* artifacts/
-mv artifacts/*.deb .
+mv artifacts/*.deb ./
 
 # Cleanup temp artifacts
 rm -rf "$TAR_NAME"
