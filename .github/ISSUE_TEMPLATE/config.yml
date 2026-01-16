@@ -6,3 +6,6 @@ templates:
   - name: "Bug Report"
     description: "Report an issue with the Pathfinder tool."
     filename: bug_report.md
+  - name: "Refactor Request"
+    description: "Suggest changes and improvements to the Pathfinder project."
+    filename: refactor_request.md
